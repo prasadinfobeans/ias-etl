@@ -37,7 +37,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     // Generate a wrapper that points to the vendor path
 $yaml = <<<'YAML'
 ias_etl:
-    resource: '%kernel.project_dir%/vendor/ias/ias-etl/config/routes.php'
+    resource: "%kernel.project_dir%/vendor/ias/ias-etl/config/routes.php"
     type: php
 YAML;
 
