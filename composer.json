@@ -1,0 +1,14 @@
+{
+  "name": "ias/ias-etl",
+  "description": "Plug‑and‑play ETL Symfony bundle with separate DB",
+  "type": "symfony-bundle",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": { "IASETL\\": "src/" }
+  },
+  "require": {
+    "php": ">=8.2",
+    "symfony/framework-bundle": "^6.3 || ^7.0",
+    "doctrine/dbal": "^3.7"
+  }
+}
