@@ -1,25 +1,21 @@
 {
   "name": "ias/ias-etl",
-  "description": "Plug‑and‑play ETL Symfony bundle with separate DB",
-  "type": "symfony-bundle",
+  "type": "composer-plugin",
+  "description": "Plug‑and‑play ETL Symfony bundle with separate DB (Composer Plugin)",
   "license": "MIT",
   "autoload": {
     "psr-4": {
       "IASETL\\": "src/"
     }
   },
+  "extra": {
+    "class": "IASETL\\Composer\\Plugin"
+  },
   "require": {
+    "composer-plugin-api": "^2.0",
     "php": ">=8.2",
     "symfony/framework-bundle": "^6.3 || ^7.0",
     "doctrine/dbal": "^3.7"
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "@php bin/ias-etl-install.php"
-    ],
-    "post-uninstall-cmd": [
-      "@php bin/ias-etl-uninstall.php"
-    ]
   }
 }
 

@@ -18,7 +18,7 @@ class ETLController
     #[Route('/etl/test-db', name: 'ias_etl_test_db')]
     public function testDb(): JsonResponse
     {
-        $result = $this->connection->fetchAssociative('SELECT NOW() AS current_time');
+        $result = $this->connection->fetchAssociative('SELECT NOW()');
         return new JsonResponse($result);
     }
 }
