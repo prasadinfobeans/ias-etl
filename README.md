@@ -19,12 +19,13 @@ composer require ias/ias-etl:dev-main
 ```
 
 If it's not listed on Packagist, make sure your Symfony project includes this in its `composer.json`:
+** Note - your-org is where package is published...
 
 ```json
 "repositories": [
   {
     "type": "vcs",
-    "url": "https://github.com/your-org/ias-etl"
+    "url": "https://github.com/[your-org]/ias-etl"
   }
 ]
 ```
@@ -62,7 +63,7 @@ If you're in a non-interactive environment or want to enable it manually, add th
 In your Symfony project's `.env` file, add:
 
 ```dotenv
-ETL_DATABASE_URL="mysql://root:root@localhost:3306/ias_test?serverVersion=8.0.42&charset=utf8mb4"
+ETL_DATABASE_URL="mysql://username:password@host:port/databse?serverVersion=8.0.42&charset=utf8mb4"
 ```
 
 > Adjust DB credentials, host, port, and database name as per your environment.
