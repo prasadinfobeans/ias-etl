@@ -31,25 +31,33 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     }
 
     public function onPostInstallOrUpdate(Event $event): void
-    {
-        $this->io->write("› Importing ETL routes…");
+	{
+	    $this->io->write("› Importing ETL routes…");
 
-        $vendorDir = $this->composer->getConfig()->get('vendor-dir');
-        $source    = $vendorDir . '/ias/ias-etl/config/routes/ias_etl.yaml';
-        $targetDir = getcwd() . '/config/routes';
-        $target    = $targetDir . '/ias_etl.yaml';
+	    $vendorDir = $this->composer->getConfig()->get('vendor-dir');
+	    $bundleDir = getcwd().'/'.$vendorDir.'/ias/ias-etl/config';
 
-        if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0755, true);
-        }
+	    $targetDir = getcwd() . '/config/routes';
+	    if (!is_dir($targetDir)) {
+		mkdir($targetDir, 0755, true);
+	    }
 
-        if (!file_exists($target)) {
-            copy($source, $target);
-            $this->io->write("✔  ETL routes imported to config/routes/ias_etl.yaml");
-        } else {
-            $this->io->write("ℹ  config/routes/ias_etl.yaml already exists, skipping.");
-        }
-    }
+	    // 1) Copy PHP routes file
+	    $srcPhp = $bundleDir . '/routes.php';
+	    $dstPhp = $targetDir . '/ias_etl_routes.php';
+	    if (!file_exists($dstPhp)) {
+		copy($srcPhp, $dstPhp);
+		$this->io->write("✔  Copied ETL PHP routes to config/routes/ias_etl_routes.php");
+	    }
+
+	    // 2) Copy wrapper YAML
+	    $srcYaml = $bundleDir . '/routes/ias_etl.yaml';
+	    $dstYaml = $targetDir . '/ias_etl.yaml';
+	    if (!file_exists($dstYaml)) {
+		copy($srcYaml, $dstYaml);
+		$this->io->write("✔  Copied ETL wrapper to config/routes/ias_etl.yaml");
+	    }
+	}
 
     public function onPostUninstall(): void
     {
