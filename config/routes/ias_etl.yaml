@@ -1,3 +1,4 @@
 ias_etl:
-    resource: 'ias_etl_routes.php'
+    resource: '%kernel.project_dir%/vendor/ias/ias-etl/config/routes.php'
     type: php
+

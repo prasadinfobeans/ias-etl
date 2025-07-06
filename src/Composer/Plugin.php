@@ -35,9 +35,10 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     $this->io->write("› Importing ETL routes…");
 
     // Generate a wrapper that points to the vendor path
-    $yaml = <<<'YAML'
-resource: '%kernel.project_dir%/vendor/ias/ias-etl/config/routes.php'
-type: php
+$yaml = <<<'YAML'
+ias_etl:
+    resource: '%kernel.project_dir%/vendor/ias/ias-etl/config/routes.php'
+    type: php
 YAML;
 
     $targetDir = getcwd() . '/config/routes';
