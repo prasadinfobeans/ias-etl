@@ -19,7 +19,6 @@ composer require ias/ias-etl:dev-main
 ```
 
 If it's not listed on Packagist, make sure your Symfony project includes this in its `composer.json`:
-** Note - your-org is where package is published...
 
 ```json
 "repositories": [
