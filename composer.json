@@ -10,5 +10,14 @@
     "php": ">=8.2",
     "symfony/framework-bundle": "^6.3 || ^7.0",
     "doctrine/dbal": "^3.7"
-  }
+  
+,
+"scripts": {
+  "post-install-cmd": [
+    "@php bin/ias-etl-install.php"
+  ],
+  "post-uninstall-cmd": [
+    "@php bin/ias-etl-uninstall.php"
+  ]
+}
 }

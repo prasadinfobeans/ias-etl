@@ -1,0 +1,3 @@
+ias_etl:
+    resource: '../../config/routes.php'
+    type: php
