@@ -26,6 +26,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             ScriptEvents::POST_INSTALL_CMD              => 'onPostInstallOrUpdate',
             ScriptEvents::POST_UPDATE_CMD               => 'onPostInstallOrUpdate',
             PackageEvents::POST_PACKAGE_UNINSTALL       => 'onPostUninstall',
+            ScriptEvents::POST_REMOVE_CMD   => 'onPostUninstall',    // <-- add this
         ];
     }
 
@@ -75,19 +76,19 @@ YAML;
 }
 
 
-    public function onPostUninstall(): void
-    {
-        $this->io->write("› Removing ETL routes…");
-        $appRoutes = getcwd() . '/config/routes';
+public function onPostUninstall(Event $event): void
+{
+    $this->io->write("› Removing ETL routes…");
 
-        foreach (['ias_etl_routes.php', 'ias_etl.yaml'] as $file) {
-            $path = "{$appRoutes}/{$file}";
-            if (file_exists($path)) {
-                unlink($path);
-                $this->io->write("✔️  Removed config/routes/{$file}");
-            }
+    $appRoutes = getcwd() . '/config/routes';
+    foreach (['ias_etl_routes.php', 'ias_etl.yaml'] as $file) {
+        $path = "{$appRoutes}/{$file}";
+        if (file_exists($path)) {
+            unlink($path);
+            $this->io->write("✔️  Removed config/routes/{$file}");
         }
     }
+}
 
     public function deactivate(Composer $composer, IOInterface $io): void {}
     public function uninstall(Composer $composer, IOInterface $io): void {}
