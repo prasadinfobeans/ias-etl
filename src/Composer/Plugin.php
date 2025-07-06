@@ -34,23 +34,33 @@ class Plugin implements PluginInterface, EventSubscriberInterface
 {
     $this->io->write("› Importing ETL routes…");
 
-    // Generate a wrapper that points to the vendor path
-$yaml = <<<'YAML'
+    $vendorDir = $this->composer->getConfig()->get('vendor-dir');            // e.g. "vendor"
+    $bundleConfig = getcwd() . "/{$vendorDir}/ias/ias-etl/config";         // bundle’s config dir
+    $appRoutesDir = getcwd() . '/config/routes';
+
+    if (!is_dir($appRoutesDir)) {
+        mkdir($appRoutesDir, 0755, true);
+    }
+
+    // 1) Copy the bundle’s PHP routes.php into the app
+    $srcPhp = "{$bundleConfig}/routes.php";
+    $dstPhp = "{$appRoutesDir}/ias_etl_routes.php";
+    if (file_exists($srcPhp) && !file_exists($dstPhp)) {
+        copy($srcPhp, $dstPhp);
+        $this->io->write("✔  Copied routes.php to config/routes/ias_etl_routes.php");
+    }
+
+    // 2) Generate a YAML wrapper that points at that local copy
+    $wrapper = <<<YAML
 ias_etl:
-    resource: "%kernel.project_dir%/vendor/ias/ias-etl/config/routes.php"
+    resource: 'ias_etl_routes.php'
     type: php
 YAML;
 
-    $targetDir = getcwd() . '/config/routes';
-    $target    = $targetDir . '/ias_etl.yaml';
-
-    if (!is_dir($targetDir)) {
-        mkdir($targetDir, 0755, true);
-    }
-
-    if (!file_exists($target)) {
-        file_put_contents($target, $yaml);
-        $this->io->write("✔  Generated ETL route wrapper at config/routes/ias_etl.yaml");
+    $dstYaml = "{$appRoutesDir}/ias_etl.yaml";
+    if (!file_exists($dstYaml)) {
+        file_put_contents($dstYaml, $wrapper);
+        $this->io->write("✔  Generated wrapper at config/routes/ias_etl.yaml");
     } else {
         $this->io->write("ℹ  config/routes/ias_etl.yaml already exists, skipping.");
     }
@@ -58,18 +68,20 @@ YAML;
 
 
 
-    public function onPostUninstall(): void
-    {
-        $this->io->write("› Removing ETL routes…");
 
-        $file = getcwd() . '/config/routes/ias_etl.yaml';
-        if (file_exists($file)) {
-            unlink($file);
-            $this->io->write("✔  Removed config/routes/ias_etl.yaml");
-        } else {
-            $this->io->write("ℹ  No ETL route file to remove.");
+public function onPostUninstall(): void
+{
+    $this->io->write("› Removing ETL routes…");
+
+    $appRoutesDir = getcwd() . '/config/routes';
+    foreach (['ias_etl_routes.php','ias_etl.yaml'] as $file) {
+        $path = "{$appRoutesDir}/{$file}";
+        if (file_exists($path)) {
+            unlink($path);
+            $this->io->write("✔  Removed config/routes/{$file}");
         }
     }
+}
 
     // deactivate() and uninstall() no‑ops
     public function deactivate(Composer $composer, IOInterface $io): void {}
