@@ -20,15 +20,15 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $this->io       = $io;
     }
 
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            ScriptEvents::POST_INSTALL_CMD              => 'onPostInstallOrUpdate',
-            ScriptEvents::POST_UPDATE_CMD               => 'onPostInstallOrUpdate',
-            PackageEvents::POST_PACKAGE_UNINSTALL       => 'onPostUninstall',
-            ScriptEvents::POST_REMOVE_CMD   => 'onPostUninstall',    // <-- add this
-        ];
-    }
+   public static function getSubscribedEvents(): array
+{
+    return [
+        ScriptEvents::POST_INSTALL_CMD           => 'onPostInstallOrUpdate',
+        ScriptEvents::POST_UPDATE_CMD            => 'onPostInstallOrUpdate',
+        PackageEvents::POST_PACKAGE_UNINSTALL    => 'onPostUninstall',
+    ];
+}
+
 
     public function onPostInstallOrUpdate(Event $event): void
 {
